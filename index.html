@@ -595,13 +595,49 @@ nav::before {
   display: flex; justify-content: space-between; align-items: flex-end;
 }
 .proj-header-right {
+  display: flex; align-items: center; gap: 16px;
   font-size: 13px; color: var(--text-tertiary); letter-spacing: -0.1px;
 }
+.proj-header-hint { flex-shrink: 0; }
+/* View switch: two icons side by side in a pill, selected = grey highlight */
+.proj-view-switch {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 100px;
+  background: rgba(0,0,0,0.04);
+  border: 1px solid rgba(0,0,0,0.08);
+  gap: 0;
+}
+.proj-view-option {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px;
+  padding: 0; border: none; border-radius: 50%;
+  background: transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.proj-view-option:hover {
+  color: var(--text-secondary);
+}
+.proj-view-option.is-selected {
+  background: rgba(0,0,0,0.08);
+  color: var(--text-primary);
+}
+.proj-view-option .proj-view-icon {
+  display: block;
+  width: 18px; height: 18px;
+}
+.proj-view-option .proj-view-icon svg { width: 100%; height: 100%; }
 
 /* Carousel */
 .proj-scroll-wrap {
   position: relative; overflow: hidden;
+  transition: opacity 0.3s ease-out;
 }
+.proj-scroll-wrap.proj-fade-out { opacity: 0; }
+.proj-scroll-wrap.proj-fade-in { opacity: 1; }
 .proj-scroll-wrap::before-DISABLED,
 .proj-scroll-wrap::after-DISABLED {
   content: ''; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2; pointer-events: none;
@@ -618,6 +654,25 @@ nav::before {
 @keyframes slideProj {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
+}
+
+/* Grid view */
+#projects.proj-view-grid .proj-scroll-wrap {
+  overflow: visible;
+  max-width: 1200px; margin: 0 auto; padding: 0 24px;
+}
+#projects.proj-view-grid .proj-track {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+  width: 100%; max-width: 100%;
+  padding: 12px 0 40px;
+  animation: none;
+  transform: none;
+}
+#projects.proj-view-grid .proj-card-dup { display: none; }
+#projects.proj-view-grid .proj-card {
+  width: 100%; max-width: 100%;
 }
 
 .proj-card {
@@ -1557,7 +1612,21 @@ body {
       <div class="section-label">Selected work</div>
       <h2 class="section-title">Things I've built.</h2>
     </div>
-    <span class="proj-header-right">Hover to explore · Click opens GitHub</span>
+    <div class="proj-header-right">
+      <span class="proj-header-hint">Hover to explore · Click opens GitHub</span>
+      <div class="proj-view-switch" role="group" aria-label="Project view">
+        <button type="button" class="proj-view-option is-selected" data-view="carousel" onclick="setProjView('carousel')" aria-pressed="true" aria-label="Carousel view" title="Carousel view">
+          <span class="proj-view-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="6" height="12" rx="1"/><rect x="9" y="6" width="6" height="12" rx="1"/><rect x="16" y="6" width="6" height="12" rx="1"/></svg>
+          </span>
+        </button>
+        <button type="button" class="proj-view-option" data-view="grid" onclick="setProjView('grid')" aria-pressed="false" aria-label="Grid view" title="Grid view">
+          <span class="proj-view-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          </span>
+        </button>
+      </div>
+    </div>
   </div>
 
   <div class="proj-scroll-wrap">
@@ -1615,10 +1684,29 @@ body {
         </div>
       </div>
 
+      <div class="proj-card" onclick="window.open('https://github.com/As3adation/Deep-learning-on-computation','_blank')">
+        <div class="proj-card-top" style="background:linear-gradient(135deg,#e8eaf0,#d4d8e4)">🧠</div>
+        <div class="proj-card-body">
+          <div class="proj-card-num">04 - Course</div>
+          <div class="proj-card-name">Deep Learning on Computation</div>
+          <div class="proj-card-desc">A comprehensive deep learning course project: foundational ML through generative and sequence-based architectures — data pipelines, backprop, CNNs, YOLOv5 detection, VAEs, GANs, Transformers, and LLM fine-tuning in Python with PyTorch on compute cluster.</div>
+          <div class="proj-tags-ap"><span class="proj-tag-ap">Python</span><span class="proj-tag-ap">PyTorch</span><span class="proj-tag-ap">CNNs</span><span class="proj-tag-ap">LLM</span></div>
+          <a class="proj-link" href="https://github.com/As3adation/Deep-learning-on-computation" target="_blank" rel="noopener" onclick="event.stopPropagation()">View on GitHub <svg viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+        <div class="proj-overlay">
+          <div class="ov-name">Deep Learning on Computation</div>
+          <div class="ov-body">Course project spanning foundational ML through modern generative and sequence-based architectures: HW1 (data pipelines, linear models), HW2 (backprop, CNNs, YOLOv5), HW3 (VAEs, GANs, Transformers, LLM fine-tuning), plus CIFAR-10 mini-project. Python, PyTorch, compute cluster.</div>
+          <div class="ov-actions">
+            <button type="button" class="ov-btn ov-btn-secondary" onclick="event.stopPropagation(); openProjModal('deep-learning')">Read more</button>
+            <a href="https://github.com/As3adation/Deep-learning-on-computation" target="_blank" rel="noopener" class="ov-btn" onclick="event.stopPropagation()">View on GitHub →</a>
+          </div>
+        </div>
+      </div>
+
       <div class="proj-card" onclick="window.open('https://github.com/Najeeb-akh/S24-Smart_intercom','_blank')">
         <div class="proj-card-top" style="background:linear-gradient(135deg,#f0ece8,#e4d8d0)">🔔</div>
         <div class="proj-card-body">
-          <div class="proj-card-num">04</div>
+          <div class="proj-card-num">05</div>
           <div class="proj-card-name">Smart Intercom IoT</div>
           <div class="proj-card-desc">ESP32 firmware with real-time processing and secure cloud communication protocols.</div>
           <div class="proj-tags-ap"><span class="proj-tag-ap">ESP32</span><span class="proj-tag-ap">Embedded</span><span class="proj-tag-ap">IoT</span></div>
@@ -1634,7 +1722,7 @@ body {
       <div class="proj-card" onclick="window.open('https://play.google.com/store/apps/details?id=com.technion.android.proplanner&hl=en','_blank')">
         <div class="proj-card-top" style="background:linear-gradient(135deg,#eef0e8,#dce4d4)">📱</div>
         <div class="proj-card-body">
-          <div class="proj-card-num">05</div>
+          <div class="proj-card-num">06</div>
           <div class="proj-card-name">ProPlanner — AI-Powered Scheduling (Android)</div>
           <div class="proj-card-desc">Flutter + Firebase Android app: smart conflict detection, recurring schedules, shared availability with friends, and an AI chatbot for natural-language scheduling. Dark mode, multi-language, customizable notifications. Available on Google Play.</div>
           <div class="proj-tags-ap"><span class="proj-tag-ap">Flutter</span><span class="proj-tag-ap">Firebase</span><span class="proj-tag-ap">Android</span></div>
@@ -1652,7 +1740,7 @@ body {
       <div class="proj-card" onclick="window.open('https://github.com/Najeeb-akh','_blank')">
         <div class="proj-card-top" style="background:linear-gradient(135deg,#eee8f0,#dcd4e4)">🧬</div>
         <div class="proj-card-body">
-          <div class="proj-card-num">06</div>
+          <div class="proj-card-num">07</div>
           <div class="proj-card-name">RNA-seq Analysis Pipeline</div>
           <div class="proj-card-desc">DESeq2 differential expression and WGCNA network modelling for respiratory disease gene signatures.</div>
           <div class="proj-tags-ap"><span class="proj-tag-ap">R</span><span class="proj-tag-ap">DESeq2</span><span class="proj-tag-ap">Bioinformatics</span></div>
@@ -1668,7 +1756,7 @@ body {
       <div class="proj-card" onclick="window.open('https://github.com/Najeeb-akh','_blank')">
         <div class="proj-card-top" style="background:linear-gradient(135deg,#f0ede8,#e8e0d8)">🏆</div>
         <div class="proj-card-body">
-          <div class="proj-card-num">07 - 3rd Place</div>
+          <div class="proj-card-num">08 - 3rd Place</div>
           <div class="proj-card-name">Family Hub App</div>
           <div class="proj-card-desc">Led a team of 5 at Hackathon Hasoub to build a family coordination app with location and scheduling.</div>
           <div class="proj-tags-ap"><span class="proj-tag-ap">JavaScript</span><span class="proj-tag-ap">Mobile</span><span class="proj-tag-ap">Team Lead</span></div>
@@ -1682,7 +1770,7 @@ body {
       </div>
 
       <!-- Duplicate set for seamless loop -->
-      <div class="proj-card" onclick="window.open('https://github.com/Najeeb-akh/Cognitive-Robotics-Final-Project','_blank')">
+      <div class="proj-card proj-card-dup" onclick="window.open('https://github.com/Najeeb-akh/Cognitive-Robotics-Final-Project','_blank')">
         <div class="proj-card-top" style="background:linear-gradient(135deg,#e8f0ec,#d0e0d8)">🤖</div>
         <div class="proj-card-body">
           <div class="proj-card-num">01 - Capstone · Graded 98</div>
@@ -1692,7 +1780,7 @@ body {
         </div>
         <div class="proj-overlay"><div class="ov-name">Cognitive Robotics — Social Law Simulation</div><div class="ov-body">Open-source contribution extending the <a href="https://github.com/Farama-Foundation/HighwayEnv" target="_blank" rel="noopener" class="proj-ext-link" onclick="event.stopPropagation()">Highway Environment</a>. Agents coordinate via social rules without direct communication.</div><div class="ov-actions"><button type="button" class="ov-btn ov-btn-secondary" onclick="event.stopPropagation(); openProjModal('cognitive-robotics')">Read more</button><a href="https://github.com/Najeeb-akh/Cognitive-Robotics-Final-Project" target="_blank" rel="noopener" class="ov-btn" onclick="event.stopPropagation()">View on GitHub →</a></div></div>
       </div>
-      <div class="proj-card" onclick="window.open('https://github.com/Najeeb-akh','_blank')">
+      <div class="proj-card proj-card-dup" onclick="window.open('https://github.com/Najeeb-akh','_blank')">
         <div class="proj-card-top" style="background:linear-gradient(135deg,#f0ede8,#e0d8d0)">🏗️</div>
         <div class="proj-card-body">
           <div class="proj-card-num">02</div>
@@ -1703,7 +1791,7 @@ body {
         </div>
         <div class="proj-overlay"><div class="ov-name">SafeMad AI</div><div class="ov-body">Unified inference pipeline with YOLOv8, SAM, and Depth-Anything-V2 for architectural analysis.</div><a href="https://github.com/Najeeb-akh" target="_blank" class="ov-btn">GitHub →</a></div>
       </div>
-      <div class="proj-card" onclick="window.open('https://github.com/adamassi/Theory-Of-Compilation-2360360','_blank')">
+      <div class="proj-card proj-card-dup" onclick="window.open('https://github.com/adamassi/Theory-Of-Compilation-2360360','_blank')">
         <div class="proj-card-top" style="background:linear-gradient(135deg,#e8ecf0,#d0d8e4)">⚙️</div>
         <div class="proj-card-body">
           <div class="proj-card-num">03</div>
@@ -1713,10 +1801,21 @@ body {
         </div>
         <div class="proj-overlay"><div class="ov-name">C Compiler — Built from Scratch</div><div class="ov-body">A C-like language compiler built from scratch in C++: lexical analysis (Lex), syntax analysis (Yacc/Bison), and code generation. Full pipeline implemented end to end.</div><div class="ov-actions"><button type="button" class="ov-btn ov-btn-secondary" onclick="event.stopPropagation(); openProjModal('theory-of-compilation')">Read more</button><a href="https://github.com/adamassi/Theory-Of-Compilation-2360360" target="_blank" rel="noopener" class="ov-btn" onclick="event.stopPropagation()">View on GitHub →</a></div></div>
       </div>
-      <div class="proj-card" onclick="window.open('https://github.com/Najeeb-akh/S24-Smart_intercom','_blank')">
+      <div class="proj-card proj-card-dup" onclick="window.open('https://github.com/As3adation/Deep-learning-on-computation','_blank')">
+        <div class="proj-card-top" style="background:linear-gradient(135deg,#e8eaf0,#d4d8e4)">🧠</div>
+        <div class="proj-card-body">
+          <div class="proj-card-num">04 - Course</div>
+          <div class="proj-card-name">Deep Learning on Computation</div>
+          <div class="proj-card-desc">Comprehensive deep learning course project: foundational ML through generative and sequence-based architectures — PyTorch, CNNs, YOLOv5, VAEs, GANs, Transformers, LLM fine-tuning.</div>
+          <div class="proj-tags-ap"><span class="proj-tag-ap">Python</span><span class="proj-tag-ap">PyTorch</span><span class="proj-tag-ap">CNNs</span><span class="proj-tag-ap">LLM</span></div>
+          <a class="proj-link" href="https://github.com/As3adation/Deep-learning-on-computation" target="_blank" rel="noopener" onclick="event.stopPropagation()">View on GitHub <svg viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+        <div class="proj-overlay"><div class="ov-name">Deep Learning on Computation</div><div class="ov-body">Course project: HW1 (data pipelines, linear models), HW2 (backprop, CNNs, YOLOv5), HW3 (VAEs, GANs, Transformers, LLM fine-tuning), CIFAR-10 mini-project. Python, PyTorch.</div><div class="ov-actions"><button type="button" class="ov-btn ov-btn-secondary" onclick="event.stopPropagation(); openProjModal('deep-learning')">Read more</button><a href="https://github.com/As3adation/Deep-learning-on-computation" target="_blank" rel="noopener" class="ov-btn" onclick="event.stopPropagation()">View on GitHub →</a></div></div>
+      </div>
+      <div class="proj-card proj-card-dup" onclick="window.open('https://github.com/Najeeb-akh/S24-Smart_intercom','_blank')">
         <div class="proj-card-top" style="background:linear-gradient(135deg,#f0ece8,#e4d8d0)">🔔</div>
         <div class="proj-card-body">
-          <div class="proj-card-num">04</div>
+          <div class="proj-card-num">05</div>
           <div class="proj-card-name">Smart Intercom IoT</div>
           <div class="proj-card-desc">ESP32 firmware with real-time processing and secure cloud communication.</div>
           <div class="proj-tags-ap"><span class="proj-tag-ap">ESP32</span><span class="proj-tag-ap">Embedded</span><span class="proj-tag-ap">IoT</span></div>
@@ -1724,20 +1823,20 @@ body {
         </div>
         <div class="proj-overlay"><div class="ov-name">Smart Intercom</div><div class="ov-body">ESP32 embedded firmware with secure cloud communication for hardware-software integration.</div><a href="https://github.com/Najeeb-akh/S24-Smart_intercom" target="_blank" class="ov-btn">GitHub →</a></div>
       </div>
-      <div class="proj-card" onclick="window.open('https://play.google.com/store/apps/details?id=com.technion.android.proplanner&hl=en','_blank')">
+      <div class="proj-card proj-card-dup" onclick="window.open('https://play.google.com/store/apps/details?id=com.technion.android.proplanner&hl=en','_blank')">
         <div class="proj-card-top" style="background:linear-gradient(135deg,#eef0e8,#dce4d4)">📱</div>
         <div class="proj-card-body">
-          <div class="proj-card-num">05</div>
+          <div class="proj-card-num">06</div>
           <div class="proj-card-name">ProPlanner — AI-Powered Scheduling (Android)</div>
           <div class="proj-card-desc">Flutter + Firebase Android app: smart conflict detection, recurring schedules, shared availability with friends, and an AI chatbot for natural-language scheduling. Dark mode, multi-language, customizable notifications. Available on Google Play.</div>
           <div class="proj-tags-ap"><span class="proj-tag-ap">Flutter</span><span class="proj-tag-ap">Firebase</span><span class="proj-tag-ap">Android</span></div>
         </div>
         <div class="proj-overlay"><div class="ov-name">ProPlanner — AI-Powered Scheduling App</div><div class="ov-body">Full-featured Android scheduling app with smart conflict detection, recurring schedules, and shared plans with friends. AI chatbot for natural-language scheduling; dark mode, multi-language, and customizable notifications. Available on the Google Play Store.</div><div class="ov-actions"><button type="button" class="ov-btn ov-btn-secondary" onclick="event.stopPropagation(); openProjModal('proplanner')">Read more</button><a href="https://play.google.com/store/apps/details?id=com.technion.android.proplanner&hl=en" target="_blank" rel="noopener" class="ov-btn" onclick="event.stopPropagation()">Get on Google Play →</a></div></div>
       </div>
-      <div class="proj-card" onclick="window.open('https://github.com/Najeeb-akh','_blank')">
+      <div class="proj-card proj-card-dup" onclick="window.open('https://github.com/Najeeb-akh','_blank')">
         <div class="proj-card-top" style="background:linear-gradient(135deg,#eee8f0,#dcd4e4)">🧬</div>
         <div class="proj-card-body">
-          <div class="proj-card-num">06</div>
+          <div class="proj-card-num">07</div>
           <div class="proj-card-name">RNA-seq Pipeline</div>
           <div class="proj-card-desc">DESeq2 differential expression and WGCNA modelling for disease gene signatures.</div>
           <div class="proj-tags-ap"><span class="proj-tag-ap">R</span><span class="proj-tag-ap">DESeq2</span><span class="proj-tag-ap">Bioinformatics</span></div>
@@ -1745,10 +1844,10 @@ body {
         </div>
         <div class="proj-overlay"><div class="ov-name">RNA-seq Pipeline</div><div class="ov-body">DESeq2 + WGCNA analysis pipeline for identifying disease-associated gene signatures.</div><a href="https://github.com/Najeeb-akh" target="_blank" class="ov-btn">GitHub →</a></div>
       </div>
-      <div class="proj-card" onclick="window.open('https://github.com/Najeeb-akh','_blank')">
+      <div class="proj-card proj-card-dup" onclick="window.open('https://github.com/Najeeb-akh','_blank')">
         <div class="proj-card-top" style="background:linear-gradient(135deg,#f0ede8,#e8e0d8)">🏆</div>
         <div class="proj-card-body">
-          <div class="proj-card-num">07 - 3rd Place</div>
+          <div class="proj-card-num">08 - 3rd Place</div>
           <div class="proj-card-name">Family Hub App</div>
           <div class="proj-card-desc">Led team of 5 at Hackathon Hasoub - family coordination app. Won 3rd place.</div>
           <div class="proj-tags-ap"><span class="proj-tag-ap">JavaScript</span><span class="proj-tag-ap">Mobile</span></div>
@@ -1798,6 +1897,13 @@ body {
       links: [
         { href: 'https://github.com/adamassi/Theory-Of-Compilation-2360360', text: 'View on GitHub' }
       ]
+    },
+    'deep-learning': {
+      title: 'Deep Learning on Computation',
+      body: 'A comprehensive deep learning course project spanning foundational machine learning through modern generative and sequence-based architectures. The work progresses across three homework blocks and a final mini-project: starting with data pipelines and linear models, moving through backpropagation, CNNs, and object detection with YOLOv5, and culminating in generative models (VAEs, GANs), Transformers, and LLM fine-tuning — all implemented in Python with PyTorch and run on compute cluster infrastructure.<br><br><strong>The project is organized into four blocks:</strong><br><br><strong>HW1 — Foundations:</strong> Covers the core machine learning workflow — dataset design, train/val/test splits, linear classification, and regression. Emphasis on reproducibility through pinned environments and scripted execution paths.<br><br><strong>HW2 — Backprop, CNNs &amp; Detection:</strong> Implements backpropagation from scratch, experiments with optimization strategies, and builds up from MLPs to convolutional networks. Concludes with a hands-on object detection component using a pretrained YOLOv5 model.<br><br><strong>HW3 — Generative &amp; Sequence Models:</strong> Explores sequence modeling, Variational Autoencoders (VAEs), Generative Adversarial Networks (GANs), and Transformer architectures. The final notebook demonstrates a full LLM fine-tuning workflow on a downstream task.<br><br><strong>Mini Project — CIFAR-10 Classification:</strong> An end-to-end image classification project on the CIFAR-10 benchmark. Includes architecture selection, training with augmentation and regularization, evaluation, and a formal written report. Delivered as a notebook, a standalone Python script, an HTML export, and a PDF write-up.',
+      links: [
+        { href: 'https://github.com/As3adation/Deep-learning-on-computation', text: 'View on GitHub' }
+      ]
     }
   };
   window.openProjModal = function(id) {
@@ -1823,6 +1929,40 @@ body {
     if (e.key === 'Escape') closeProjModal();
   }
 })();
+
+window.setProjView = function(view) {
+  var section = document.getElementById('projects');
+  var wrap = section && section.querySelector('.proj-scroll-wrap');
+  var options = section && section.querySelectorAll('.proj-view-option');
+  if (!section || !wrap || !options.length) return;
+  var isGrid = view === 'grid';
+  if (section.classList.contains('proj-view-grid') === isGrid) return; /* already in this view */
+
+  function applyView() {
+    section.classList.toggle('proj-view-grid', isGrid);
+    options.forEach(function(btn) {
+      var active = btn.getAttribute('data-view') === view;
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+      btn.classList.toggle('is-selected', active);
+    });
+    wrap.classList.remove('proj-fade-out');
+    wrap.classList.add('proj-fade-in');
+    setTimeout(function() { wrap.classList.remove('proj-fade-in'); }, 320);
+  }
+
+  wrap.classList.add('proj-fade-out');
+  wrap.addEventListener('transitionend', function onOut() {
+    wrap.removeEventListener('transitionend', onOut);
+    applyView();
+  });
+  /* fallback if transitionend doesn’t fire */
+  setTimeout(function() {
+    if (wrap.classList.contains('proj-fade-out')) {
+      wrap.classList.remove('proj-fade-out');
+      applyView();
+    }
+  }, 350);
+};
 </script>
 
 <!-- EXPERIENCE -->
