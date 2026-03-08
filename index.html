@@ -691,7 +691,11 @@ nav::before {
 }
 .proj-card-desc {
   font-size: 13px; color: var(--text-secondary); line-height: 1.55;
-  letter-spacing: -0.1px; margin-bottom: 16px;
+  letter-spacing: -0.1px; margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .proj-tags-ap { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
 .proj-tag-ap {
@@ -727,7 +731,10 @@ nav::before {
 }
 .proj-card:hover .proj-overlay { opacity: 1; pointer-events: all; }
 .ov-name { font-size: 20px; font-weight: 700; letter-spacing: -0.6px; color: var(--text-primary); margin-bottom: 12px; }
-.ov-body { font-size: 13px; color: var(--text-secondary); line-height: 1.65; letter-spacing: -0.1px; margin-bottom: 24px; }
+.ov-body { font-size: 13px; color: var(--text-secondary); line-height: 1.65; letter-spacing: -0.1px; margin-bottom: 20px; }
+.ov-actions {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+}
 .ov-btn {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 10px 20px; 
@@ -762,6 +769,168 @@ nav::before {
 
 .ov-btn:active {
   transform: scale(0.97);
+}
+.ov-btn-secondary {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--text-primary);
+  border-color: rgba(0, 0, 0, 0.1);
+  font-family: inherit;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 100px;
+  text-decoration: none;
+}
+.ov-btn-secondary:hover {
+  background: rgba(0, 0, 0, 0.09);
+  border-color: rgba(0, 0, 0, 0.14);
+}
+
+/* Inline link inside project card (e.g. Highway Environment) */
+.proj-card-desc .proj-ext-link,
+.ov-body .proj-ext-link {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+.proj-card-desc .proj-ext-link:hover,
+.ov-body .proj-ext-link:hover {
+  border-bottom-color: var(--accent);
+}
+
+/* Read more button */
+.proj-read-more {
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 6px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s, opacity 0.2s;
+}
+.proj-read-more:hover {
+  opacity: 0.85;
+}
+
+/* Project modal – liquid glass popup */
+.proj-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.proj-modal-backdrop.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+.proj-modal-glass {
+  max-width: 520px;
+  width: 100%;
+  max-height: 85vh;
+  overflow: auto;
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  padding: 32px;
+  position: relative;
+  transform: scale(0.96);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.proj-modal-backdrop.is-open .proj-modal-glass {
+  transform: scale(1);
+}
+.proj-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--text-secondary);
+  transition: background 0.2s, color 0.2s;
+}
+.proj-modal-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: var(--text-primary);
+}
+.proj-modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  padding-right: 44px;
+}
+.proj-modal-body {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  letter-spacing: -0.1px;
+  margin-bottom: 24px;
+}
+.proj-modal-body .proj-ext-link {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+.proj-modal-body .proj-ext-link:hover {
+  border-bottom-color: var(--accent);
+}
+.proj-modal-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.proj-modal-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 100px;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.proj-modal-links a:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
 }
 
 /* ─── EXPERIENCE ───────────────────────────────────── */
@@ -1394,19 +1563,21 @@ body {
   <div class="proj-scroll-wrap">
     <div class="proj-track">
 
-      <div class="proj-card" onclick="window.open('https://github.com/Najeeb-akh','_blank')">
+      <div class="proj-card" onclick="window.open('https://github.com/Najeeb-akh/Cognitive-Robotics-Final-Project','_blank')">
         <div class="proj-card-top" style="background:linear-gradient(135deg,#e8f0ec,#d0e0d8)">🤖</div>
         <div class="proj-card-body">
           <div class="proj-card-num">01 - Capstone · Graded 98</div>
-          <div class="proj-card-name">Multi-Agent Simulation Framework</div>
-          <div class="proj-card-desc">Open-source Highway-Env extension with 12 social-law controllers reducing collisions by ~60%.</div>
+          <div class="proj-card-name">Cognitive Robotics — Social Law Simulation</div>
+          <div class="proj-card-desc">A Python-based simulation exploring social laws in multi-agent robotics. An open-source extension of the <a href="https://github.com/Farama-Foundation/HighwayEnv" target="_blank" rel="noopener" class="proj-ext-link" onclick="event.stopPropagation()">Highway Environment</a> project: agents coordinate in shared spaces without direct communication.</div>
           <div class="proj-tags-ap"><span class="proj-tag-ap">Python</span><span class="proj-tag-ap">Multi-Agent</span><span class="proj-tag-ap">HPC</span></div>
-          <a class="proj-link" href="https://github.com/Najeeb-akh" target="_blank">View on GitHub <svg viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </div>
         <div class="proj-overlay">
-          <div class="ov-name">Multi-Agent Simulation</div>
-          <div class="ov-body">Architected and co-led an open-source extension of Highway-Env. Clean abstraction layers separating engine internals, controller logic, and experiments. Multi-core workflows with latency &amp; throughput analysis.</div>
-          <a href="https://github.com/Najeeb-akh" target="_blank" class="ov-btn">GitHub →</a>
+          <div class="ov-name">Cognitive Robotics — Social Law Simulation</div>
+          <div class="ov-body">Open-source contribution extending the <a href="https://github.com/Farama-Foundation/HighwayEnv" target="_blank" rel="noopener" class="proj-ext-link" onclick="event.stopPropagation()">Highway Environment</a>. Models how autonomous agents coordinate via predefined social rules, preventing conflicts without direct communication.</div>
+          <div class="ov-actions">
+            <button type="button" class="ov-btn ov-btn-secondary" onclick="event.stopPropagation(); openProjModal('cognitive-robotics')">Read more</button>
+            <a href="https://github.com/Najeeb-akh/Cognitive-Robotics-Final-Project" target="_blank" rel="noopener" class="ov-btn" onclick="event.stopPropagation()">View on GitHub →</a>
+          </div>
         </div>
       </div>
 
@@ -1426,19 +1597,21 @@ body {
         </div>
       </div>
 
-      <div class="proj-card" onclick="window.open('https://github.com/Najeeb-akh','_blank')">
+      <div class="proj-card" onclick="window.open('https://github.com/adamassi/Theory-Of-Compilation-2360360','_blank')">
         <div class="proj-card-top" style="background:linear-gradient(135deg,#e8ecf0,#d0d8e4)">⚙️</div>
         <div class="proj-card-body">
           <div class="proj-card-num">03</div>
-          <div class="proj-card-name">LLVM-Based Compiler</div>
-          <div class="proj-card-desc">Complete compiler infrastructure for a domain-specific language using LLVM with advanced IR optimization.</div>
-          <div class="proj-tags-ap"><span class="proj-tag-ap">C++</span><span class="proj-tag-ap">LLVM</span><span class="proj-tag-ap">Compilers</span></div>
-          <a class="proj-link" href="https://github.com/Najeeb-akh" target="_blank">View on GitHub <svg viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="proj-card-name">C Compiler — Built from Scratch</div>
+          <div class="proj-card-desc">A compiler for a C-like language built from scratch in C++. Full pipeline: lexical analysis (Lex), syntax analysis (Yacc/Bison), and code generation—each stage implemented by hand.</div>
+          <div class="proj-tags-ap"><span class="proj-tag-ap">C++</span><span class="proj-tag-ap">Lex</span><span class="proj-tag-ap">Yacc</span></div>
         </div>
         <div class="proj-overlay">
-          <div class="ov-name">LLVM Compiler</div>
-          <div class="ov-body">Engineered a full compiler for a domain-specific language using LLVM - advanced parsing, semantic analysis, and optimized intermediate representation for efficient code generation.</div>
-          <a href="https://github.com/Najeeb-akh" target="_blank" class="ov-btn">GitHub →</a>
+          <div class="ov-name">C Compiler — Built from Scratch</div>
+          <div class="ov-body">A C-like language compiler built from scratch in C++: lexical analysis (Lex), syntax analysis (Yacc/Bison), and code generation. Full pipeline implemented end to end.</div>
+          <div class="ov-actions">
+            <button type="button" class="ov-btn ov-btn-secondary" onclick="event.stopPropagation(); openProjModal('theory-of-compilation')">Read more</button>
+            <a href="https://github.com/adamassi/Theory-Of-Compilation-2360360" target="_blank" rel="noopener" class="ov-btn" onclick="event.stopPropagation()">View on GitHub →</a>
+          </div>
         </div>
       </div>
 
@@ -1458,19 +1631,21 @@ body {
         </div>
       </div>
 
-      <div class="proj-card" onclick="window.open('https://github.com/Najeeb-akh','_blank')">
+      <div class="proj-card" onclick="window.open('https://play.google.com/store/apps/details?id=com.technion.android.proplanner&hl=en','_blank')">
         <div class="proj-card-top" style="background:linear-gradient(135deg,#eef0e8,#dce4d4)">📱</div>
         <div class="proj-card-body">
           <div class="proj-card-num">05</div>
-          <div class="proj-card-name">ProPlanner AI App</div>
-          <div class="proj-card-desc">Cross-platform Flutter app with NLP chatbot for intelligent scheduling and event management.</div>
-          <div class="proj-tags-ap"><span class="proj-tag-ap">Flutter</span><span class="proj-tag-ap">Firebase</span><span class="proj-tag-ap">NLP</span></div>
-          <a class="proj-link" href="https://github.com/Najeeb-akh" target="_blank">View on GitHub <svg viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="proj-card-name">ProPlanner — AI-Powered Scheduling (Android)</div>
+          <div class="proj-card-desc">Flutter + Firebase Android app: smart conflict detection, recurring schedules, shared availability with friends, and an AI chatbot for natural-language scheduling. Dark mode, multi-language, customizable notifications. Available on Google Play.</div>
+          <div class="proj-tags-ap"><span class="proj-tag-ap">Flutter</span><span class="proj-tag-ap">Firebase</span><span class="proj-tag-ap">Android</span></div>
         </div>
         <div class="proj-overlay">
-          <div class="ov-name">ProPlanner</div>
-          <div class="ov-body">Cross-platform scheduling app with Flutter + Firebase. Integrated NLP chatbot through API implementation for intelligent event management and calendar optimization.</div>
-          <a href="https://github.com/Najeeb-akh" target="_blank" class="ov-btn">GitHub →</a>
+          <div class="ov-name">ProPlanner — AI-Powered Scheduling App</div>
+          <div class="ov-body">Full-featured Android scheduling app with smart conflict detection, recurring schedules, and shared plans with friends. AI chatbot for natural-language scheduling; dark mode, multi-language, and customizable notifications. Available on the Google Play Store.</div>
+          <div class="ov-actions">
+            <button type="button" class="ov-btn ov-btn-secondary" onclick="event.stopPropagation(); openProjModal('proplanner')">Read more</button>
+            <a href="https://play.google.com/store/apps/details?id=com.technion.android.proplanner&hl=en" target="_blank" rel="noopener" class="ov-btn" onclick="event.stopPropagation()">Get on Google Play →</a>
+          </div>
         </div>
       </div>
 
@@ -1507,16 +1682,15 @@ body {
       </div>
 
       <!-- Duplicate set for seamless loop -->
-      <div class="proj-card" onclick="window.open('https://github.com/Najeeb-akh','_blank')">
+      <div class="proj-card" onclick="window.open('https://github.com/Najeeb-akh/Cognitive-Robotics-Final-Project','_blank')">
         <div class="proj-card-top" style="background:linear-gradient(135deg,#e8f0ec,#d0e0d8)">🤖</div>
         <div class="proj-card-body">
           <div class="proj-card-num">01 - Capstone · Graded 98</div>
-          <div class="proj-card-name">Multi-Agent Simulation Framework</div>
-          <div class="proj-card-desc">Open-source Highway-Env extension with 12 social-law controllers reducing collisions by ~60%.</div>
+          <div class="proj-card-name">Cognitive Robotics — Social Law Simulation</div>
+          <div class="proj-card-desc">A Python-based simulation exploring social laws in multi-agent robotics. An open-source extension of the <a href="https://github.com/Farama-Foundation/HighwayEnv" target="_blank" rel="noopener" class="proj-ext-link" onclick="event.stopPropagation()">Highway Environment</a> project: agents coordinate in shared spaces without direct communication.</div>
           <div class="proj-tags-ap"><span class="proj-tag-ap">Python</span><span class="proj-tag-ap">Multi-Agent</span><span class="proj-tag-ap">HPC</span></div>
-          <a class="proj-link" href="#" target="_blank">View on GitHub <svg viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </div>
-        <div class="proj-overlay"><div class="ov-name">Multi-Agent Simulation</div><div class="ov-body">Architected modular simulation framework with 12 social-law controllers reducing collision rates by ~60%.</div><a href="https://github.com/Najeeb-akh" target="_blank" class="ov-btn">GitHub →</a></div>
+        <div class="proj-overlay"><div class="ov-name">Cognitive Robotics — Social Law Simulation</div><div class="ov-body">Open-source contribution extending the <a href="https://github.com/Farama-Foundation/HighwayEnv" target="_blank" rel="noopener" class="proj-ext-link" onclick="event.stopPropagation()">Highway Environment</a>. Agents coordinate via social rules without direct communication.</div><div class="ov-actions"><button type="button" class="ov-btn ov-btn-secondary" onclick="event.stopPropagation(); openProjModal('cognitive-robotics')">Read more</button><a href="https://github.com/Najeeb-akh/Cognitive-Robotics-Final-Project" target="_blank" rel="noopener" class="ov-btn" onclick="event.stopPropagation()">View on GitHub →</a></div></div>
       </div>
       <div class="proj-card" onclick="window.open('https://github.com/Najeeb-akh','_blank')">
         <div class="proj-card-top" style="background:linear-gradient(135deg,#f0ede8,#e0d8d0)">🏗️</div>
@@ -1529,16 +1703,15 @@ body {
         </div>
         <div class="proj-overlay"><div class="ov-name">SafeMad AI</div><div class="ov-body">Unified inference pipeline with YOLOv8, SAM, and Depth-Anything-V2 for architectural analysis.</div><a href="https://github.com/Najeeb-akh" target="_blank" class="ov-btn">GitHub →</a></div>
       </div>
-      <div class="proj-card" onclick="window.open('https://github.com/Najeeb-akh','_blank')">
+      <div class="proj-card" onclick="window.open('https://github.com/adamassi/Theory-Of-Compilation-2360360','_blank')">
         <div class="proj-card-top" style="background:linear-gradient(135deg,#e8ecf0,#d0d8e4)">⚙️</div>
         <div class="proj-card-body">
           <div class="proj-card-num">03</div>
-          <div class="proj-card-name">LLVM-Based Compiler</div>
-          <div class="proj-card-desc">Full DSL compiler with advanced parsing, semantic analysis & IR optimization.</div>
-          <div class="proj-tags-ap"><span class="proj-tag-ap">C++</span><span class="proj-tag-ap">LLVM</span><span class="proj-tag-ap">Compilers</span></div>
-          <a class="proj-link" href="#" target="_blank">View on GitHub <svg viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="proj-card-name">C Compiler — Built from Scratch</div>
+          <div class="proj-card-desc">A compiler for a C-like language built from scratch in C++. Full pipeline: lexical analysis (Lex), syntax analysis (Yacc/Bison), and code generation—each stage implemented by hand.</div>
+          <div class="proj-tags-ap"><span class="proj-tag-ap">C++</span><span class="proj-tag-ap">Lex</span><span class="proj-tag-ap">Yacc</span></div>
         </div>
-        <div class="proj-overlay"><div class="ov-name">LLVM Compiler</div><div class="ov-body">Full compiler infrastructure for a domain-specific language with LLVM IR optimization.</div><a href="https://github.com/Najeeb-akh" target="_blank" class="ov-btn">GitHub →</a></div>
+        <div class="proj-overlay"><div class="ov-name">C Compiler — Built from Scratch</div><div class="ov-body">A C-like language compiler built from scratch in C++: lexical analysis (Lex), syntax analysis (Yacc/Bison), and code generation. Full pipeline implemented end to end.</div><div class="ov-actions"><button type="button" class="ov-btn ov-btn-secondary" onclick="event.stopPropagation(); openProjModal('theory-of-compilation')">Read more</button><a href="https://github.com/adamassi/Theory-Of-Compilation-2360360" target="_blank" rel="noopener" class="ov-btn" onclick="event.stopPropagation()">View on GitHub →</a></div></div>
       </div>
       <div class="proj-card" onclick="window.open('https://github.com/Najeeb-akh/S24-Smart_intercom','_blank')">
         <div class="proj-card-top" style="background:linear-gradient(135deg,#f0ece8,#e4d8d0)">🔔</div>
@@ -1551,16 +1724,15 @@ body {
         </div>
         <div class="proj-overlay"><div class="ov-name">Smart Intercom</div><div class="ov-body">ESP32 embedded firmware with secure cloud communication for hardware-software integration.</div><a href="https://github.com/Najeeb-akh/S24-Smart_intercom" target="_blank" class="ov-btn">GitHub →</a></div>
       </div>
-      <div class="proj-card" onclick="window.open('https://github.com/Najeeb-akh','_blank')">
+      <div class="proj-card" onclick="window.open('https://play.google.com/store/apps/details?id=com.technion.android.proplanner&hl=en','_blank')">
         <div class="proj-card-top" style="background:linear-gradient(135deg,#eef0e8,#dce4d4)">📱</div>
         <div class="proj-card-body">
           <div class="proj-card-num">05</div>
-          <div class="proj-card-name">ProPlanner AI App</div>
-          <div class="proj-card-desc">Flutter + Firebase cross-platform app with NLP chatbot for intelligent scheduling.</div>
-          <div class="proj-tags-ap"><span class="proj-tag-ap">Flutter</span><span class="proj-tag-ap">Firebase</span><span class="proj-tag-ap">NLP</span></div>
-          <a class="proj-link" href="#" target="_blank">View on GitHub <svg viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <div class="proj-card-name">ProPlanner — AI-Powered Scheduling (Android)</div>
+          <div class="proj-card-desc">Flutter + Firebase Android app: smart conflict detection, recurring schedules, shared availability with friends, and an AI chatbot for natural-language scheduling. Dark mode, multi-language, customizable notifications. Available on Google Play.</div>
+          <div class="proj-tags-ap"><span class="proj-tag-ap">Flutter</span><span class="proj-tag-ap">Firebase</span><span class="proj-tag-ap">Android</span></div>
         </div>
-        <div class="proj-overlay"><div class="ov-name">ProPlanner</div><div class="ov-body">Flutter & Firebase app with NLP chatbot for intelligent calendar management and scheduling.</div><a href="https://github.com/Najeeb-akh" target="_blank" class="ov-btn">GitHub →</a></div>
+        <div class="proj-overlay"><div class="ov-name">ProPlanner — AI-Powered Scheduling App</div><div class="ov-body">Full-featured Android scheduling app with smart conflict detection, recurring schedules, and shared plans with friends. AI chatbot for natural-language scheduling; dark mode, multi-language, and customizable notifications. Available on the Google Play Store.</div><div class="ov-actions"><button type="button" class="ov-btn ov-btn-secondary" onclick="event.stopPropagation(); openProjModal('proplanner')">Read more</button><a href="https://play.google.com/store/apps/details?id=com.technion.android.proplanner&hl=en" target="_blank" rel="noopener" class="ov-btn" onclick="event.stopPropagation()">Get on Google Play →</a></div></div>
       </div>
       <div class="proj-card" onclick="window.open('https://github.com/Najeeb-akh','_blank')">
         <div class="proj-card-top" style="background:linear-gradient(135deg,#eee8f0,#dcd4e4)">🧬</div>
@@ -1588,6 +1760,70 @@ body {
     </div>
   </div>
 </div>
+
+<!-- Project detail modal (liquid glass) -->
+<div id="proj-modal-backdrop" class="proj-modal-backdrop" onclick="if(event.target === this) closeProjModal()" aria-hidden="true">
+  <div class="proj-modal-glass" role="dialog" aria-modal="true" aria-labelledby="proj-modal-title" onclick="event.stopPropagation()">
+    <button type="button" class="proj-modal-close" onclick="closeProjModal()" aria-label="Close">×</button>
+    <div id="proj-modal-title" class="proj-modal-title"></div>
+    <div class="proj-modal-body" id="proj-modal-body"></div>
+    <div class="proj-modal-links" id="proj-modal-links"></div>
+  </div>
+</div>
+<script>
+(function() {
+  var modalBackdrop = document.getElementById('proj-modal-backdrop');
+  var modalTitle = document.getElementById('proj-modal-title');
+  var modalBody = document.getElementById('proj-modal-body');
+  var modalLinks = document.getElementById('proj-modal-links');
+  var projContent = {
+    'cognitive-robotics': {
+      title: 'Cognitive Robotics — Social Law Simulation',
+      body: 'A Python-based simulation exploring the concept of social laws in multi-agent robotics systems. The project models how autonomous agents can coordinate and navigate shared environments by following predefined social rules, preventing conflicts without requiring direct communication between agents.<br><br>Built as an <strong>open-source contribution</strong> on top of the <a href="https://github.com/Farama-Foundation/HighwayEnv" target="_blank" rel="noopener" class="proj-ext-link">Highway Environment</a> project (maintained by the Farama Foundation), it extends the existing framework to simulate and evaluate social law behavior across multiple agents. The work demonstrates how formal social rules can improve coordination and safety in autonomous driving and multi-agent scenarios.',
+      links: [
+        { href: 'https://github.com/Najeeb-akh/Cognitive-Robotics-Final-Project', text: 'Project on GitHub' },
+        { href: 'https://github.com/Farama-Foundation/HighwayEnv', text: 'Highway Environment (Farama)' }
+      ]
+    },
+    'proplanner': {
+      title: 'ProPlanner — AI-Powered Scheduling App (Android)',
+      body: 'A full-featured Android scheduling application built with Flutter and Firebase. ProPlanner lets users create and manage events with <strong>smart conflict detection</strong>, set up <strong>recurring schedules</strong>, and coordinate plans with friends through <strong>shared availability</strong>.<br><br>The app features an <strong>AI-powered chatbot assistant</strong> for natural-language scheduling, along with dark mode, multi-language support, and customizable notifications. Available on the Google Play Store.',
+      links: [
+        { href: 'https://play.google.com/store/apps/details?id=com.technion.android.proplanner&hl=en', text: 'Get on Google Play' }
+      ]
+    },
+    'theory-of-compilation': {
+      title: 'C Compiler — Built from Scratch',
+      body: 'A compiler for a C-like language built from scratch in C++. The project covers the <strong>full compilation pipeline</strong>: <strong>lexical analysis</strong> (tokenization via Lex), <strong>syntax analysis</strong> (grammar parsing via Yacc/Bison), and <strong>code generation</strong>—each stage implemented by hand, culminating in a working compiler that translates source code through every classical stage.',
+      links: [
+        { href: 'https://github.com/adamassi/Theory-Of-Compilation-2360360', text: 'View on GitHub' }
+      ]
+    }
+  };
+  window.openProjModal = function(id) {
+    var data = projContent[id];
+    if (!data) return;
+    modalTitle.textContent = data.title;
+    modalBody.innerHTML = data.body;
+    modalLinks.innerHTML = data.links.map(function(l) {
+      return '<a href="' + l.href + '" target="_blank" rel="noopener">' + l.text + ' <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>';
+    }).join('');
+    modalBackdrop.classList.add('is-open');
+    modalBackdrop.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', onModalKeydown);
+  };
+  window.closeProjModal = function() {
+    modalBackdrop.classList.remove('is-open');
+    modalBackdrop.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', onModalKeydown);
+  };
+  function onModalKeydown(e) {
+    if (e.key === 'Escape') closeProjModal();
+  }
+})();
+</script>
 
 <!-- EXPERIENCE -->
 <section id="experience">
